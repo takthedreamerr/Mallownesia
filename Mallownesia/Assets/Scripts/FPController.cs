@@ -9,19 +9,11 @@ public class FPController : MonoBehaviour
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
+
     [Header("Look Settings")]
     public Transform cameraTransform;
     public float lookSensitivity = 2f;
     public float verticalLookLimit = 90f;
-
-    [Header("Shooting")]
-    public GameObject bulletPrefab;
-    public Transform gunpoint;
-
-    /*[Header("Pickup Settingds")]
-    public float pickupRange = 3f;
-    public Transform holdPoint;
-    private PickUpObject heldObject;*/
 
     private CharacterController controller;
     private Vector2 moveInput;
@@ -38,11 +30,6 @@ public class FPController : MonoBehaviour
     {
         HandleMovement();
         HandleLook();
-
-        /*if (heldObject != null)
-        {
-            heldObject.MoveToHoldPoint(holdPoint.position);
-        }*/
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -80,51 +67,6 @@ public class FPController : MonoBehaviour
         }
     }
 
-    public void OnShoot(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Shoot();
-        }
-    }
-    private void Shoot()
-    {
-        if (bulletPrefab != null && gunpoint != null)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, gunpoint.position, gunpoint.rotation);
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+     
 
-            if (rb != null)
-            {
-                rb.AddForce(gunpoint.forward * 1000f); // Adjust force value as needed
-                Destroy(bullet, 3);
-                //delete the bullet from the scene after 3 seconds
-
-            }
-        }
-    }
-
-    /*public void OnPickUp(InputAction.CallbackContext context)
-    {
-        if (!context.performed) return;
-
-        if (heldObject == null)
-        {
-            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
-            {
-                PickUpObject pickup = hit.collider.GetComponent<PickUpObject>();
-                if (pickup != null)
-                {
-                    pickup.PickUp(holdPoint);
-                    heldObject = pickup;
-                }
-            }
-        }
-        else
-        {
-            heldObject.Drop();
-            heldObject = null;
-        }
-    }*/
 }

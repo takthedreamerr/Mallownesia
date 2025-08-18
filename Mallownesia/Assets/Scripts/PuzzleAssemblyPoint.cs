@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PuzzleAssemblyPoint : MonoBehaviour
 {
-    public GameObject completedPuzzlePrefab; 
+    public GameObject completedPuzzlePrefab;
+    public DoorController door;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -23,5 +24,10 @@ public class PuzzleAssemblyPoint : MonoBehaviour
     {
         Instantiate(completedPuzzlePrefab, transform.position, transform.rotation);
         Debug.Log("Puzzle Completed!");
+
+        if (door != null)
+        {
+            door.OpenDoor();
+        }
     }
 }
