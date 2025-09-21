@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Tak.unity
     guid: fafd80aa20661e940b81b49974e94e98
   - enabled: 1
+    path: Assets/Scenes/YouWin.unity
+    guid: aba41da3bd3657f4e9fe0d98da9ffc5a
+  - enabled: 1
     path: Assets/Scenes/GameOver.unity
     guid: 7b332ba23bb81f34ea8e0b26992fe1b3
   m_configObjects:

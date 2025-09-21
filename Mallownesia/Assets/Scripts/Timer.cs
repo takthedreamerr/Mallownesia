@@ -13,6 +13,7 @@ public class Timer : MonoBehaviour
     private bool hasTriggeredGameOver = false;
 
     private SceneLoader sceneLoader;
+    public float CurrentTime => currentTime;
 
     void Start()
     {

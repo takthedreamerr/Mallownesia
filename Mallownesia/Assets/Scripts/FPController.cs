@@ -45,7 +45,7 @@ public class FPController : MonoBehaviour
         moveInput.y;
         controller.Move(move * moveSpeed * Time.deltaTime);
         if (controller.isGrounded && velocity.y < 0)
-            velocity.y = -2f;
+            velocity.y = -1.5f;
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
@@ -66,7 +66,4 @@ public class FPController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
-
-     
-
 }
