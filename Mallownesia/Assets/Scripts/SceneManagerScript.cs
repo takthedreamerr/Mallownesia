@@ -1,20 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    // Call this method from the Button's OnClick event
-    public void LoadTakScene()
+    public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene("Tak");
-    }
-    public void LoadGameOverScene()
-    {
-        SceneManager.LoadScene("GameOver");
-    }
-
-    public void LoadYouWinScene()
-    {
-        SceneManager.LoadScene("YouWin");
+        SceneManager.LoadScene(sceneName);
     }
 }

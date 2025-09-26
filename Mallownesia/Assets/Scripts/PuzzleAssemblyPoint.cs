@@ -24,7 +24,7 @@ public class PuzzleAssemblyPoint : MonoBehaviour
     {
         Instantiate(completedPuzzlePrefab, transform.position, transform.rotation);
         Debug.Log("Puzzle Completed!");
-
+        /*
         Timer timer = Object.FindFirstObjectByType<Timer>();
         if (timer != null && timer.CurrentTime > 0)  // We'll make CurrentTime public
         {
@@ -38,5 +38,6 @@ public class PuzzleAssemblyPoint : MonoBehaviour
                 Debug.LogWarning("SceneLoader not found in scene.");
             }
         }
+        */
     }
 }
