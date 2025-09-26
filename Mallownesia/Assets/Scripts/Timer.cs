@@ -35,7 +35,9 @@ public class Timer : MonoBehaviour
             // Move to Game Over scene
             if (sceneLoader != null)
             {
-                sceneLoader.LoadGameOverScene();
+                sceneLoader.LoadGameOverScene("GameOver");
+
+
             }
             else
             {
