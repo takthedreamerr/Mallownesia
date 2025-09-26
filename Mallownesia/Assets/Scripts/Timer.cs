@@ -32,9 +32,12 @@ public class Timer : MonoBehaviour
             currentTime = 0;
             hasTriggeredGameOver = true;
 
+            // Move to Game Over scene
             if (sceneLoader != null)
             {
-                sceneLoader.LoadGameOverScene();
+                sceneLoader.LoadGameOverScene("GameOver");
+
+
             }
             else
             {
@@ -44,7 +47,4 @@ public class Timer : MonoBehaviour
 
         countdownText.text = currentTime.ToString("0");
     }
-
-
 }
-
