@@ -235,6 +235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bef8e91dad12a4c8d736ba7312c629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Panel001: {fileID: 0}
+  Panel002: {fileID: 0}
+  Panel003: {fileID: 0}
+  currentPanel: 0
 --- !u!1 &701236664
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +299,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: c9f6d0e7bc8541498c9a4799ba184ede, type: 3}
     m_FontSize: 19
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
