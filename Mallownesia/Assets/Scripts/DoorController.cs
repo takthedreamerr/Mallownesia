@@ -1,47 +1,116 @@
 using UnityEngine;
+using System.Collections;
 
 public class DoorController : MonoBehaviour
 {
-    public float openAngle = 90f;      // how much to rotate
-    public float openSpeed = 2f;       // how fast it rotates
-    public bool isOpen = false;
+    [Header("Rotation Parameters")]
+    [SerializeField] public Vector3 openRotation = new Vector3(-90, 0, 0);
+    public float animationSpeed = 2f;
+
+    [Header("Key Requirement")]
+    public KeyItem requiredKey;
+
+    [Header("Door Type Settings")]
+    [SerializeField] private bool isKeypadDoor = false;
 
     private Quaternion closedRotation;
-    private Quaternion openRotation;
-    private Coroutine currentCoroutine;
+    private Quaternion openRotationQuaternion;
+    private bool isOpen = false;
 
-    void Start()
+    // --- New fields ---
+    private bool playerNear = false;
+    private Inventory playerInventory;
+
+    private void Start()
     {
-        closedRotation = transform.rotation;
-        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
+        closedRotation = transform.localRotation;
+        openRotationQuaternion = closedRotation * Quaternion.Euler(openRotation);
     }
 
-    
-    private System.Collections.IEnumerator RotateDoor(Quaternion targetRotation)
+    private void Update()
     {
-        Quaternion startRotation = transform.rotation;
-        float time = 0f;
-
-        while (time < 1f)
+        if (playerNear && Input.GetKeyDown(KeyCode.E))
         {
-            time += Time.deltaTime * openSpeed;
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, time);
+            if (playerInventory != null)
+            {
+                ToggleDoor(playerInventory);
+            }
+            else
+            {
+                Debug.LogWarning("No player inventory found!");
+            }
+        }
+    }
+
+    public void ToggleDoor(Inventory playerInventory)
+    {
+        if (isKeypadDoor)
+        {
+            Debug.Log("This door requires a keypad to open.");
+            return;
+        }
+
+        if (requiredKey != null && !playerInventory.HasKey(requiredKey))
+        {
+            Debug.Log("You need the correct key to open this door!");
+            return;
+        }
+
+        if (requiredKey == null && !isKeypadDoor)
+        {
+            Debug.Log("The door is unlocked and can be opened.");
+        }
+
+        ToggleDoorState();
+    }
+
+    public void OpenDoorFromKeypad()
+    {
+        if (isKeypadDoor && !isOpen)
+        {
+            ToggleDoorState();
+        }
+    }
+
+    private void ToggleDoorState()
+    {
+        StopAllCoroutines();
+        Quaternion targetRotation = isOpen ? closedRotation : openRotationQuaternion;
+        StartCoroutine(AnimateDoorRotation(targetRotation));
+        isOpen = !isOpen;
+    }
+
+    private IEnumerator AnimateDoorRotation(Quaternion targetRotation)
+    {
+        while (Quaternion.Angle(transform.localRotation, targetRotation) > 0.01f)
+        {
+            transform.localRotation = Quaternion.RotateTowards(
+                transform.localRotation,
+                targetRotation,
+                Time.deltaTime * animationSpeed * 100f
+            );
             yield return null;
         }
 
-        transform.rotation = targetRotation; // snap to exact final rotation
+        transform.localRotation = targetRotation;
     }
 
-    public void OpenDoor()
+    // --- Trigger detection for player ---
+    private void OnTriggerEnter(Collider other)
     {
-        if (!isOpen) // only open once
+        if (other.CompareTag("Player"))
         {
-            isOpen = true;
+            playerNear = true;
+            playerInventory = other.GetComponent<Inventory>(); // grab player's inventory
+        }
+    }
 
-            if (currentCoroutine != null)
-                StopCoroutine(currentCoroutine);
-
-            currentCoroutine = StartCoroutine(RotateDoor(openRotation));
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerNear = false;
+            playerInventory = null;
         }
     }
 }

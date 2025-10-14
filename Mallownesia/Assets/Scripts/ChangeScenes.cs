@@ -47,7 +47,7 @@ public class ChangeScenes : MonoBehaviour
         }
         if (currentPanel == 3)
         {
-            SceneManager.LoadScene("NewHouse");
+            SceneManager.LoadScene("Sub2");
         }
         currentPanel++;
 

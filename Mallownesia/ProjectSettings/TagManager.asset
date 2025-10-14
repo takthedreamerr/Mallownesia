@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - PickUp
+  - Pickupable
+  - Book
+  - Key
+  - Keypad
   layers:
   - Default
   - TransparentFX

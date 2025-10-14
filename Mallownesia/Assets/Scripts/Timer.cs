@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using TMPro; // <-- import TextMeshPro namespace
 
 public class Timer : MonoBehaviour
 {
     float currentTime;
     public float startingTime = 10f;
 
-    [SerializeField] Text countdownText;
+    [SerializeField] TMP_Text countdownText; // <-- TMP_Text instead of Text
     private bool hasTriggeredGameOver = false;
 
     private SceneLoader sceneLoader;
@@ -32,12 +31,9 @@ public class Timer : MonoBehaviour
             currentTime = 0;
             hasTriggeredGameOver = true;
 
-            // Move to Game Over scene
             if (sceneLoader != null)
             {
                 sceneLoader.LoadGameOverScene("GameOver");
-
-
             }
             else
             {

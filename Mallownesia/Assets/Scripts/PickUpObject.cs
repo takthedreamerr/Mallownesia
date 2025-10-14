@@ -1,55 +1,151 @@
+using TMPro;
 using UnityEngine;
 
 public class PickUpObject : MonoBehaviour
 {
-    private Rigidbody rb;
+    [Header("References")]
+    public GameObject PickObjct; // 3D remote
+    public GameObject remote;    // remote UI panel
+    public TextMeshProUGUI interact; // "Press E"
+    public GameObject bookPanel;
+    public Inventory playerInventory; // link player’s Inventory script
 
+    private bool canPickUp = false;
+    private bool holdingRemote = false;
+    private bool nearBook = false;
+    private KeyItem nearbyKey = null; // key currently in trigger
+    private KeypadController nearbyKeypad = null; // keypad currently in trigger
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        if (remote != null) remote.SetActive(false);
+        if (interact != null) interact.gameObject.SetActive(false);
+        if (bookPanel != null) bookPanel.SetActive(false);
     }
 
-    public void PickUp(Transform holdPoint)
+    private void Update()
     {
-        rb.useGravity = false;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (canPickUp && !holdingRemote)
+            {
+                // Pick up remote
+                if (remote != null) remote.SetActive(true);
+                if (PickObjct != null) PickObjct.SetActive(false);
 
-        transform.SetParent(holdPoint);
-        transform.localPosition = Vector3.zero;
+                Debug.Log("Picked up remote");
+                holdingRemote = true;
+                canPickUp = false;
+
+                if (interact != null) interact.gameObject.SetActive(false);
+            }
+            else if (holdingRemote)
+            {
+                // Drop remote
+                if (remote != null) remote.SetActive(false);
+                if (PickObjct != null) PickObjct.SetActive(true);
+
+                holdingRemote = false;
+            }
+            else if (nearBook)
+            {
+                Debug.Log("Interacted with book!");
+                if (bookPanel != null) bookPanel.SetActive(true);
+                if (interact != null) interact.gameObject.SetActive(false);
+            }
+            else if (nearbyKey != null)
+            {
+                // Pick up key
+                playerInventory.AddKey(nearbyKey);
+                Debug.Log("Picked up key: " + nearbyKey.keyID);
+                Destroy(nearbyKey.gameObject);
+                if (interact != null) interact.gameObject.SetActive(false);
+                nearbyKey = null;
+            }
+            else if (nearbyKeypad != null)
+            {
+                // Interact with keypad
+                Debug.Log("Interacted with keypad!");
+                //nearbyKeypad.OpenKeypadPanel(); // <-- Make sure your KeypadItem has this method
+                if (interact != null) interact.gameObject.SetActive(false);
+            }
+        }
     }
 
-    public void Drop()
+    private void OnTriggerEnter(Collider other)
     {
-        rb.useGravity = true;
-        transform.SetParent(null);
+        if (other.CompareTag("Pickupable"))
+        {
+            if (interact != null)
+            {
+                interact.text = "Press E to pick up Remote";
+                interact.gameObject.SetActive(true);
+            }
+            canPickUp = true;
+        }
+
+        if (other.CompareTag("Book"))
+        {
+            if (interact != null)
+            {
+                interact.text = "Press E to read Book";
+                interact.gameObject.SetActive(true);
+            }
+            nearBook = true;
+        }
+
+        if (other.CompareTag("Key"))
+        {
+            nearbyKey = other.GetComponent<KeyItem>();
+            if (interact != null)
+            {
+                interact.text = "Press E to pick up Key";
+                interact.gameObject.SetActive(true);
+            }
+        }
+
+        if (other.CompareTag("Keypad"))
+        {
+            nearbyKeypad = other.GetComponent<KeypadController>();
+            if (interact != null)
+            {
+                interact.text = "INTERACT USING numbers (BACKSPACE = Clear, ENTER =Enter)";
+                interact.gameObject.SetActive(true);
+            }
+        }
     }
 
-    /*public void Throw(Vector3 impulse)
+    private void OnTriggerExit(Collider other)
     {
-        transform.SetParent(null);
-        rb.useGravity = true;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.AddForce(impulse, ForceMode.Impulse);
-    }*/
+        if (other.CompareTag("Pickupable"))
+        {
+            if (!holdingRemote && interact != null)
+                interact.gameObject.SetActive(false);
+            canPickUp = false;
+        }
 
-    public void MoveToHoldPoint(Vector3 targetPosition)
-    {
-        rb.MovePosition(targetPosition);
+        if (other.CompareTag("Book"))
+        {
+            if (interact != null) interact.gameObject.SetActive(false);
+            nearBook = false;
+        }
+
+        if (other.CompareTag("Key") && nearbyKey != null && other.GetComponent<KeyItem>() == nearbyKey)
+        {
+            if (interact != null) interact.gameObject.SetActive(false);
+            nearbyKey = null;
+        }
+
+        if (other.CompareTag("Keypad") && nearbyKeypad != null && other.GetComponent<KeypadController>() == nearbyKeypad)
+        {
+            if (interact != null) interact.gameObject.SetActive(false);
+            nearbyKeypad = null;
+        }
     }
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void CloseBookPanel()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (bookPanel != null)
+            bookPanel.SetActive(false);
     }
 }
