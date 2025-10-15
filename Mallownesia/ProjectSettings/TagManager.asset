@@ -9,6 +9,8 @@ TagManager:
   - Book
   - Key
   - Keypad
+  - Door
+  - LockerDoor
   layers:
   - Default
   - TransparentFX

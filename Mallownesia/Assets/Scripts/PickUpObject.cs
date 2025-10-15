@@ -1,151 +1,118 @@
 using TMPro;
 using UnityEngine;
 
+public enum TargetType { None, PickupRemote, Book, Key, Keypad, Door, LockerDoor }
 public class PickUpObject : MonoBehaviour
 {
     [Header("References")]
-    public GameObject PickObjct; // 3D remote
-    public GameObject remote;    // remote UI panel
-    public TextMeshProUGUI interact; // "Press E"
-    public GameObject bookPanel;
-    public Inventory playerInventory; // link player’s Inventory script
+    public GameObject PickObjct; // your “hands free” model (optional)
+    public GameObject remote;    // the remote-in-hand (optional)
+    public TMPro.TextMeshProUGUI interact; // not used anymore (kept for compatibility)
+    public GameObject bookPanel; // legacy ref if you need it
+    public Inventory playerInventory;
 
-    private bool canPickUp = false;
-    private bool holdingRemote = false;
-    private bool nearBook = false;
-    private KeyItem nearbyKey = null; // key currently in trigger
-    private KeypadController nearbyKeypad = null; // keypad currently in trigger
+    [Header("Managers")]
+    [SerializeField] UIContextController ui;
 
-    private void Awake()
+    TargetType current = TargetType.None;
+    KeyItem nearbyKey;
+    KeypadController nearbyKeypad;
+    DoorController nearbyDoor;
+    //LockerDoor lockerDoor;
+
+    void Awake()
     {
-        if (remote != null) remote.SetActive(false);
-        if (interact != null) interact.gameObject.SetActive(false);
-        if (bookPanel != null) bookPanel.SetActive(false);
+        if (!ui) ui = FindFirstObjectByType<UIContextController>();
+        if (!playerInventory) playerInventory = FindFirstObjectByType<Inventory>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!GameState.IsFreeToInteract) return;
+
+        if (current != TargetType.None && Input.GetKeyDown(KeyCode.E))
         {
-            if (canPickUp && !holdingRemote)
+            switch (current)
             {
-                // Pick up remote
-                if (remote != null) remote.SetActive(true);
-                if (PickObjct != null) PickObjct.SetActive(false);
+                case TargetType.PickupRemote:
+                    bool nowHolding = !remote.activeSelf;
+                    remote.SetActive(nowHolding);
+                    if (PickObjct) PickObjct.SetActive(!nowHolding);
+                    ui?.ClearPrompt();
+                    break;
 
-                Debug.Log("Picked up remote");
-                holdingRemote = true;
-                canPickUp = false;
+                case TargetType.Book:
+                    ui?.ShowBookUI(true);
+                    ui?.ClearPrompt();
+                    break;
 
-                if (interact != null) interact.gameObject.SetActive(false);
-            }
-            else if (holdingRemote)
-            {
-                // Drop remote
-                if (remote != null) remote.SetActive(false);
-                if (PickObjct != null) PickObjct.SetActive(true);
+                case TargetType.Key:
+                    if (nearbyKey)
+                    {
+                        playerInventory.AddKey(nearbyKey);
+                        Destroy(nearbyKey.gameObject);
+                        nearbyKey = null;
+                        ui?.ClearPrompt();
+                        //PickupJuice.SpawnAt(transform.position);
+                        //SoundManager.Play("pickup");
+                    }
+                    break;
 
-                holdingRemote = false;
-            }
-            else if (nearBook)
-            {
-                Debug.Log("Interacted with book!");
-                if (bookPanel != null) bookPanel.SetActive(true);
-                if (interact != null) interact.gameObject.SetActive(false);
-            }
-            else if (nearbyKey != null)
-            {
-                // Pick up key
-                playerInventory.AddKey(nearbyKey);
-                Debug.Log("Picked up key: " + nearbyKey.keyID);
-                Destroy(nearbyKey.gameObject);
-                if (interact != null) interact.gameObject.SetActive(false);
-                nearbyKey = null;
-            }
-            else if (nearbyKeypad != null)
-            {
-                // Interact with keypad
-                Debug.Log("Interacted with keypad!");
-                //nearbyKeypad.OpenKeypadPanel(); // <-- Make sure your KeypadItem has this method
-                if (interact != null) interact.gameObject.SetActive(false);
-            }
-        }
-    }
+                case TargetType.Keypad:
+                    if (nearbyKeypad)
+                    {
+                        ui?.ShowPhoneUI(true);
+                        //nearbyKeypad.Open();
+                    }
+                    break;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Pickupable"))
-        {
-            if (interact != null)
-            {
-                interact.text = "Press E to pick up Remote";
-                interact.gameObject.SetActive(true);
-            }
-            canPickUp = true;
-        }
+                case TargetType.Door:
+                    //if (nearbyDoor) nearbyDoor.TryInteract(playerInventory);
+                    break;
 
-        if (other.CompareTag("Book"))
-        {
-            if (interact != null)
-            {
-                interact.text = "Press E to read Book";
-                interact.gameObject.SetActive(true);
-            }
-            nearBook = true;
-        }
-
-        if (other.CompareTag("Key"))
-        {
-            nearbyKey = other.GetComponent<KeyItem>();
-            if (interact != null)
-            {
-                interact.text = "Press E to pick up Key";
-                interact.gameObject.SetActive(true);
-            }
-        }
-
-        if (other.CompareTag("Keypad"))
-        {
-            nearbyKeypad = other.GetComponent<KeypadController>();
-            if (interact != null)
-            {
-                interact.text = "INTERACT USING numbers (BACKSPACE = Clear, ENTER =Enter)";
-                interact.gameObject.SetActive(true);
+               // case TargetType.LockerDoor:
+                  //  if (lockerDoor) lockerDoor.Toggle();
+                   // break;
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void SetTarget(TargetType t, string prompt)
     {
-        if (other.CompareTag("Pickupable"))
-        {
-            if (!holdingRemote && interact != null)
-                interact.gameObject.SetActive(false);
-            canPickUp = false;
-        }
+        if (current == t) return;
+        current = t;
+        if (t == TargetType.None) ui?.ClearPrompt();
+        else ui?.SetPrompt(prompt);
+    }
 
-        if (other.CompareTag("Book"))
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Pickupable")) SetTarget(TargetType.PickupRemote, "Pick up Remote [E]");
+        else if (other.CompareTag("Book")) SetTarget(TargetType.Book, "Read Note [E]");
+        else if (other.CompareTag("Key")) { nearbyKey = other.GetComponent<KeyItem>(); SetTarget(TargetType.Key, "Pick up Key [E]"); }
+        else if (other.CompareTag("Keypad")) { nearbyKeypad = other.GetComponent<KeypadController>(); SetTarget(TargetType.Keypad, "Use Phone Keypad [E]"); }
+        else if (other.CompareTag("Door"))
         {
-            if (interact != null) interact.gameObject.SetActive(false);
-            nearBook = false;
+            nearbyDoor = other.GetComponentInParent<DoorController>();
+           // string p = (nearbyDoor && nearbyDoor.IsKeypadDoor) ? "Door is locked by keypad" :
+                       //(nearbyDoor && nearbyDoor.CanOpenWith(playerInventory)) ? "Unlock Door [E]" :
+                       //"Door is locked";
+            //SetTarget(TargetType.Door, p);
         }
-
-        if (other.CompareTag("Key") && nearbyKey != null && other.GetComponent<KeyItem>() == nearbyKey)
+        else if (other.CompareTag("LockerDoor"))
         {
-            if (interact != null) interact.gameObject.SetActive(false);
-            nearbyKey = null;
-        }
-
-        if (other.CompareTag("Keypad") && nearbyKeypad != null && other.GetComponent<KeypadController>() == nearbyKeypad)
-        {
-            if (interact != null) interact.gameObject.SetActive(false);
-            nearbyKeypad = null;
+            //lockerDoor = other.GetComponentInParent<LockerDoor>();
+            SetTarget(TargetType.LockerDoor, "Open Panel [E]");
         }
     }
 
-    public void CloseBookPanel()
+    void OnTriggerExit(Collider other)
     {
-        if (bookPanel != null)
-            bookPanel.SetActive(false);
+        if (other.CompareTag("Pickupable") && current == TargetType.PickupRemote) SetTarget(TargetType.None, "");
+        else if (other.CompareTag("Book") && current == TargetType.Book) SetTarget(TargetType.None, "");
+        else if (other.CompareTag("Key") && other.GetComponent<KeyItem>() == nearbyKey) { nearbyKey = null; SetTarget(TargetType.None, ""); }
+        else if (other.CompareTag("Keypad") && other.GetComponent<KeypadController>() == nearbyKeypad) { nearbyKeypad = null; SetTarget(TargetType.None, ""); }
+        else if (other.CompareTag("Door") && other.GetComponentInParent<DoorController>() == nearbyDoor) { nearbyDoor = null; SetTarget(TargetType.None, ""); }
+        //else if (other.CompareTag("LockerDoor") && other.GetComponentInParent<LockerDoor>() == lockerDoor) { lockerDoor = null; SetTarget(TargetType.None, ""); }
     }
 }
