@@ -4247,6 +4247,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 0}
   playerInventory: {fileID: 1320531710}
+  ui: {fileID: 0}
 --- !u!23 &938493086
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4954,6 +4955,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 0}
   playerInventory: {fileID: 0}
+  ui: {fileID: 0}
 --- !u!1 &1152545584
 GameObject:
   m_ObjectHideFlags: 0
@@ -6170,6 +6172,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 716172201}
   playerInventory: {fileID: 1320531710}
+  ui: {fileID: 0}
 --- !u!114 &1320531710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7201,7 +7204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75dca0484a5124647b2e22dffca77f7f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0074
+      value: -0.00724
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75dca0484a5124647b2e22dffca77f7f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8474,6 +8477,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 0}
   playerInventory: {fileID: 0}
+  ui: {fileID: 0}
 --- !u!114 &1779702465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9075,6 +9079,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 716172201}
   playerInventory: {fileID: 0}
+  ui: {fileID: 0}
 --- !u!65 &1841781097
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10563,6 +10568,7 @@ MonoBehaviour:
   interact: {fileID: 2080342873}
   bookPanel: {fileID: 0}
   playerInventory: {fileID: 1320531710}
+  ui: {fileID: 0}
 --- !u!65 &2059669904
 BoxCollider:
   m_ObjectHideFlags: 0
