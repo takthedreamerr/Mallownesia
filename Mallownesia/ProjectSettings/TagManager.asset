@@ -11,6 +11,7 @@ TagManager:
   - Keypad
   - Door
   - LockerDoor
+  - InvitePoster
   layers:
   - Default
   - TransparentFX
