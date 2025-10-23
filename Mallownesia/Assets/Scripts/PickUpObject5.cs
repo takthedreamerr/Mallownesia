@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
 
-public class PickUpObject_Keypad : MonoBehaviour
+public class PickUpObject5 : MonoBehaviour
 {
+    ///////////////////////// KEYPAD //////////////////////////
+
+
     [Header("References")]
 
     public TextMeshProUGUI interact; // "Press E"
@@ -21,8 +24,10 @@ public class PickUpObject_Keypad : MonoBehaviour
             {
                 // Interact with keypad
                 Debug.Log("Interacted with keypad!");
-                //nearbyKeypad.OpenKeypadPanel(); // <-- Make sure your KeypadItem has this method
+                //nearbyKeypad.OpenKeypadPanel();
                 if (interact != null) interact.gameObject.SetActive(false);
+                
+                //SoundManager.PlaySound(SoundType.Door);
             }
         }
     }
@@ -34,7 +39,7 @@ public class PickUpObject_Keypad : MonoBehaviour
             nearbyKeypad = other.GetComponent<KeypadController>();
             if (interact != null)
             {
-                interact.text = "INTERACT USING numbers (BACKSPACE = Clear, ENTER =Enter)";
+                interact.text = "INTERACT [NUMPAD] (BACKSPACE = CLEAR; ENTER )";
                 interact.gameObject.SetActive(true);
                 Debug.Log("KEYPAD IN USE");
             }
@@ -44,9 +49,9 @@ public class PickUpObject_Keypad : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
 
-        if (other.CompareTag("Keypad") && nearbyKeypad != null && other.GetComponent<KeypadController>() == nearbyKeypad)
+        if (other.CompareTag("Keypad"))
         {
-            if (interact != null) interact.gameObject.SetActive(false);
+            interact.gameObject.SetActive(false);
             nearbyKeypad = null;
         }
     }

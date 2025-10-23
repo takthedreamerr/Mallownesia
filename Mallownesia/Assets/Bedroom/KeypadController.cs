@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class KeypadController : MonoBehaviour
 {
@@ -7,9 +8,15 @@ public class KeypadController : MonoBehaviour
     [SerializeField] private string correctCode = "1234";
     [SerializeField] private DoorController door;
     [SerializeField] private TextMeshPro textMeshProDisplay;
+    public GameObject key2;
 
     private string enteredCode = "";
     private bool isActive = true; // Always active if using keyboard
+
+    private void Start()
+    {
+        key2.gameObject.SetActive(false);
+    }
 
     private void Update()
     {
@@ -22,18 +29,21 @@ public class KeypadController : MonoBehaviour
             {
                 AddDigit(i.ToString());
             }
+            //SoundManager.PlaySound(SoundType.Button);
         }
 
         // Enter key
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             EnterCode();
+            //SoundManager.PlaySound(SoundType.Button);
         }
 
         // Backspace / Clear
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             ClearCode();
+            //SoundManager.PlaySound(SoundType.Button);
         }
     }
 
@@ -58,7 +68,11 @@ public class KeypadController : MonoBehaviour
         {
             Debug.Log("Correct code entered! Opening door...");
             if (door != null)
+            {
                 door.OpenDoorFromKeypad();
+                key2.SetActive(true);
+                Debug.Log("Key popped");
+            }    
             ClearCode();
         }
         else
@@ -73,4 +87,6 @@ public class KeypadController : MonoBehaviour
         if (textMeshProDisplay != null)
             textMeshProDisplay.text = enteredCode;
     }
+
+
 }

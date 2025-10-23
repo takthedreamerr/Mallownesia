@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
 
-public class PickUpObject_Key : MonoBehaviour
+public class PickUpObject4 : MonoBehaviour
 {
+    ///////////////////////// KEY //////////////////////////
+
+
     [Header("References")]
     public TextMeshProUGUI interact; // "Press E"
     private KeyItem nearbyKey = null; // key currently in trigger
@@ -37,6 +40,8 @@ public class PickUpObject_Key : MonoBehaviour
                 interact.text = "Press E to pick up Key";
                 interact.gameObject.SetActive(true);
                 Debug.Log("KEY PICKED UP");
+
+                //SoundManager.PlaySound(SoundType.FoundKey);
             }
         }
     }

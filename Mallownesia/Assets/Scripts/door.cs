@@ -3,9 +3,11 @@ using System.Collections;
 
 public class Door : MonoBehaviour
 {
-    [Header("Rotation Parameters")]
-    public Vector3 openRotation = new Vector3(-90, 0, 0);
-    public float animationSpeed = 2f;
+    [Header("Door Animation")]
+    public Animator animator;
+
+    // Animation parameter names
+    private string isOpenParam = "IsOpen";
 
     [Header("Key Requirement")]
     public KeyItem requiredKey;
@@ -13,8 +15,10 @@ public class Door : MonoBehaviour
     [Header("Door Type Settings")]
     public bool isKeypadDoor = false;
 
-    private Quaternion closedRotation;
-    private Quaternion openRotationQuaternion;
+    [Header("References")]
+    public Collider doorCollider; // the main blocking collider 
+    public Collider triggerCollider; // child trigger collider 
+
     private bool isOpen = false;
 
     // --- Player detection ---
@@ -26,13 +30,34 @@ public class Door : MonoBehaviour
 
     private void Start()
     {
-        closedRotation = transform.localRotation;
-        openRotationQuaternion = closedRotation * Quaternion.Euler(openRotation);
-
-        Debug.Log("Door initialized. Closed: " + closedRotation.eulerAngles + ", Open: " + openRotationQuaternion.eulerAngles);
-
         if (pressEText != null)
             pressEText.SetActive(false);
+
+        if (doorCollider != null)
+        {
+            doorCollider.isTrigger = false; // This blocks movement
+        }
+
+        if (triggerCollider != null)
+        {
+            triggerCollider.isTrigger = true; // This detects player
+        }
+        else
+        {
+            Debug.LogError("No trigger collider assigned to door!");
+        }
+
+        // Auto-find animator if not assigned
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+
+        // Ensure door starts closed
+        if (animator != null)
+        {
+            animator.SetBool(isOpenParam, false);
+        }
     }
 
     private void Update()
@@ -72,36 +97,63 @@ public class Door : MonoBehaviour
             Debug.Log("Door does not require a key.");
         }
 
-        ToggleDoorState();
+        // Actually open the door when all checks pass
+        OpenDoor();
     }
 
-    private void ToggleDoorState()
+    public void OpenDoor()
     {
-        StopAllCoroutines();
-        Quaternion targetRotation = isOpen ? closedRotation : openRotationQuaternion;
+        if (isOpen) return; // Don't open if already open
 
-        Debug.Log("Animating door from " + transform.localRotation.eulerAngles +
-                  " to " + targetRotation.eulerAngles + ". Currently open: " + isOpen);
-
-        StartCoroutine(AnimateDoorRotation(targetRotation));
-        isOpen = !isOpen;
-    }
-
-    private IEnumerator AnimateDoorRotation(Quaternion targetRotation)
-    {
-        while (Quaternion.Angle(transform.localRotation, targetRotation) > 0.01f)
+        if (animator != null)
         {
-            transform.localRotation = Quaternion.RotateTowards(
-                transform.localRotation,
-                targetRotation,
-                Time.deltaTime * animationSpeed * 100f
-            );
-            yield return null;
+            // Use bool parameter to trigger the open animation
+            animator.SetBool(isOpenParam, true);
+            Debug.Log("Setting door to open state");
+        }
+        else
+        {
+            Debug.LogWarning("No animator found on door!");
         }
 
-        transform.localRotation = targetRotation;
+        // Disable the blocking collider when door opens
+        if (doorCollider != null)
+        {
+            doorCollider.enabled = false;
+        }
 
-        Debug.Log("Door rotation finished. Door is now " + (isOpen ? "open" : "closed"));
+        isOpen = true;
+        Debug.Log("Door opened!");
+    }
+
+    public void CloseDoor()
+    {
+        if (!isOpen) return; // Don't close if already closed
+
+        if (animator != null)
+        {
+            // Use bool parameter to trigger the close animation
+            animator.SetBool(isOpenParam, false);
+            Debug.Log("Setting door to closed state");
+        }
+        else
+        {
+            Debug.LogWarning("No animator found on door!");
+        }
+
+        // Re-enable the blocking collider when door closes
+        if (doorCollider != null)
+        {
+            doorCollider.enabled = true;
+        }
+
+        isOpen = false;
+        Debug.Log("Door closed!");
+    }
+
+    public bool IsOpen()
+    {
+        return isOpen;
     }
 
     // --- Trigger detection ---
