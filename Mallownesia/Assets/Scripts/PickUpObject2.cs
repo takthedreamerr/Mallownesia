@@ -1,18 +1,22 @@
 using TMPro;
 using UnityEngine;
 
-public class PickUpObject_Book : MonoBehaviour
+public class PickUpObject2 : MonoBehaviour
 {
+    ///////////////////////// BOOKS //////////////////////////
+
     [Header("References")]
     public TextMeshProUGUI interact; // "Press E"
     public GameObject bookPanel;
+    public GameObject key1;
 
     private bool nearBook = false;
 
     private void Awake()
     {
         if (interact != null) interact.gameObject.SetActive(false);
-        if (bookPanel != null) bookPanel.SetActive(false);  
+        if (bookPanel != null) bookPanel.SetActive(false);
+        if (key1 != null) key1.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -37,6 +41,7 @@ public class PickUpObject_Book : MonoBehaviour
             {
                 interact.text = "Press E to read Book";
                 interact.gameObject.SetActive(true);
+                key1.SetActive(true);
                 Debug.Log("BOOK OPEN");
             }
             nearBook = true;
@@ -55,6 +60,10 @@ public class PickUpObject_Book : MonoBehaviour
     public void CloseBookPanel()
     {
         if (bookPanel != null)
+        {
             bookPanel.SetActive(false);
+            
+        }
+            
     }
 }

@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
 
-public class PickUpObject_Invite : MonoBehaviour
+public class PickUpObject3 : MonoBehaviour
 {
+    ///////////////////////// INVITE //////////////////////////
+
+
     [Header("References")]
     public TextMeshProUGUI interact; // "Press E"
     public GameObject InvitePanel;
@@ -24,8 +27,9 @@ public class PickUpObject_Invite : MonoBehaviour
                 Debug.Log("Interacted with book!");
                 if (InvitePanel != null) InvitePanel.SetActive(true);
                 if (interact != null) interact.gameObject.SetActive(false);
-            }
-           
+                //SoundManager.PlaySound(SoundType.Hint);
+            }  
+             
         }
     }
 
@@ -41,6 +45,15 @@ public class PickUpObject_Invite : MonoBehaviour
                 Debug.Log("INVITE OPEN");
             }
             nearInvite = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("InvitePoster"))
+        {
+            if (interact != null) interact.gameObject.SetActive(false);
+            nearInvite = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +9,8 @@ public class FPController : MonoBehaviour
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
     //public float jumpHeight = 1.5f;
+    [Header("Animation Settings")]
+    public Animator animator;
 
     [Header("Look Settings")]
     public Transform cameraTransform;
@@ -93,20 +95,26 @@ public class FPController : MonoBehaviour
         }
     }*/
 
-   
+
 
 
 
     public void HandleMovement()
     {
-        Vector3 move = transform.right * moveInput.x + transform.forward *
-        moveInput.y;
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         controller.Move(move * moveSpeed * Time.deltaTime);
+
         if (controller.isGrounded && velocity.y < 0)
             velocity.y = -1.5f;
+
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // ✅ Animation update
+        float speed = move.magnitude;
+        animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
     }
+
     public void HandleLook()
     {
         float mouseX = lookInput.x * lookSensitivity;

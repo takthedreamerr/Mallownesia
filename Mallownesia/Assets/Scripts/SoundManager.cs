@@ -7,6 +7,7 @@ public enum SoundType
     WALK,
     Speaker, 
     Door,
+    Button,
     Lamellow,Lamellow2,Lamellow3,lamellow4,
     Hint,
     FoundKey,
@@ -28,6 +29,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+       
         AudioSource = GetComponent<AudioSource>();
     }
 

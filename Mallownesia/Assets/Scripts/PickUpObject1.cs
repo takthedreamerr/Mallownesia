@@ -1,7 +1,7 @@
-using TMPro;
+/*using TMPro;
 using UnityEngine;
 
-public class PickUpObject : MonoBehaviour
+public class PickUpObject1 : MonoBehaviour
 {
     [Header("References")]
     public GameObject PickObjct; // 3D remote
@@ -104,7 +104,7 @@ public class PickUpObject : MonoBehaviour
                 Debug.Log("INVITE OPEN");
             }
             nearInvite = true;
-        }*/
+        }
 
         if (other.CompareTag("Book"))
         {
@@ -173,4 +173,4 @@ public class PickUpObject : MonoBehaviour
         if (bookPanel != null)
             bookPanel.SetActive(false);
     }
-}
+}*/
