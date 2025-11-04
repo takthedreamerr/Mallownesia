@@ -129,26 +129,7 @@ public class Door : MonoBehaviour
     public void CloseDoor()
     {
         if (!isOpen) return; // Don't close if already closed
-
-        if (animator != null)
-        {
-            // Use bool parameter to trigger the close animation
-            animator.SetBool(isOpenParam, false);
-            Debug.Log("Setting door to closed state");
-        }
-        else
-        {
-            Debug.LogWarning("No animator found on door!");
-        }
-
-        // Re-enable the blocking collider when door closes
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = true;
-        }
-
-        isOpen = false;
-        Debug.Log("Door closed!");
+        StartCoroutine(DoorClose_Delay());
     }
 
     public bool IsOpen()
@@ -190,5 +171,29 @@ public class Door : MonoBehaviour
             if (pressEText != null)
                 pressEText.SetActive(false);
         }
+    }
+
+    IEnumerator DoorClose_Delay()
+    {
+        yield return new WaitForSeconds(5f);
+        if (animator != null)
+        {
+            // Use bool parameter to trigger the close animation
+            animator.SetBool(isOpenParam, false);
+            Debug.Log("Setting door to closed state");
+        }
+        else
+        {
+            Debug.LogWarning("No animator found on door!");
+        }
+
+        // Re-enable the blocking collider when door closes
+        if (doorCollider != null)
+        {
+            doorCollider.enabled = true;
+        }
+
+        isOpen = false;
+        Debug.Log("Door closed!");
     }
 }

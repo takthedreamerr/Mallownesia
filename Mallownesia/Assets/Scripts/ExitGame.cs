@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExitGame : MonoBehaviour
 {
-    public void QuitGame()
+    public void RetryGame()
     {
-        Application.Quit();
+        SceneManager.LoadScene(1);
     }
 }

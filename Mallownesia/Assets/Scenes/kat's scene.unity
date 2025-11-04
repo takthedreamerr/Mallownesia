@@ -738,7 +738,7 @@ GameObject:
   - component: {fileID: 211152226}
   - component: {fileID: 211152227}
   m_Layer: 0
-  m_Name: BRGameObject_Open
+  m_Name: Stops_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -752,12 +752,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211152225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.01918665, y: 0.7078112, z: 0.7057542, w: 0.023370484}
-  m_LocalPosition: {x: -0.00052, y: 0.00059, z: 0.00081}
-  m_LocalScale: {x: 0.004958986, y: 0.004958987, z: 0.0049589877}
+  m_LocalRotation: {x: 0.019186646, y: 0.70781136, z: 0.70575416, w: 0.023370488}
+  m_LocalPosition: {x: -0.010213128, y: 0.0023047314, z: -0.0027777222}
+  m_LocalScale: {x: 0.0016534047, y: 0.0049725655, z: 0.0026399337}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1474975928}
+  m_Father: {fileID: 2973663261164347628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &211152227
 BoxCollider:
@@ -774,12 +774,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.80867755, y: 2.5602043, z: 1.8926312}
-  m_Center: {x: 0.21441846, y: -0.11973611, z: -0.9298464}
+  m_Size: {x: 0.21225713, y: 2.5602045, z: 1.8926312}
+  m_Center: {x: -0.08398699, y: -0.118572265, z: -0.9354913}
 --- !u!1 &234450925
 GameObject:
   m_ObjectHideFlags: 0
@@ -6790,7 +6790,7 @@ GameObject:
   - component: {fileID: 1474975934}
   - component: {fileID: 1474975935}
   m_Layer: 0
-  m_Name: 'DoorBedRoom '
+  m_Name: Door_and_InteractMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6804,12 +6804,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474975927}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000014912801, y: -0, z: 0.0000000027939675, w: 1}
-  m_LocalPosition: {x: -0.01004, y: 0.00199, z: -0.00359}
-  m_LocalScale: {x: 0.33292472, y: 0.5334411, z: 1.0028149}
+  m_LocalRotation: {x: -0.00000017901762, y: -0.0000000018626447, z: -0, w: 1}
+  m_LocalPosition: {x: -0.01004001, y: 0.0019900016, z: -0.003590004}
+  m_LocalScale: {x: 0.3329247, y: 0.53344095, z: 1.0028149}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 211152226}
+  m_Children: []
   m_Father: {fileID: 2973663261164347628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1474975930
@@ -6854,12 +6853,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0017959549, y: 0.009871285, z: 0.013402385}
-  m_Center: {x: 0.00018429666, y: -0.0037861094, z: 0.00023521313}
+  m_Size: {x: 0.0070373015, y: 0.009871285, z: 0.013402385}
+  m_Center: {x: -0.002436391, y: -0.0037861536, z: 0.00023521313}
 --- !u!23 &1474975932
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6948,10 +6947,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1474975934}
-  doorCollider: {fileID: 1474975931}
-  openTrigger: {fileID: 211152227}
+  stopPlayer_collider: {fileID: 211152227}
   closeTrigger: {fileID: 1899143591}
-  pressEText: {fileID: 2080342872}
+  pressEText: {fileID: 264499753}
 --- !u!1 &1476406137
 GameObject:
   m_ObjectHideFlags: 0
@@ -8044,8 +8042,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9441517, y: 2.6405516, z: 1.8926312}
-  m_Center: {x: 0.74938995, y: -0.07952807, z: -0.9318341}
+  m_Size: {x: 0.4854059, y: 2.6405516, z: 1.8926314}
+  m_Center: {x: 0.97891486, y: -0.080423236, z: -0.9274922}
 --- !u!114 &1899143592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15982,8 +15980,9 @@ Transform:
   m_LocalScale: {x: 605.7048, y: 402.86838, z: 203.68504}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1899143590}
   - {fileID: 1474975928}
+  - {fileID: 1899143590}
+  - {fileID: 211152226}
   - {fileID: 8598738543128403100}
   - {fileID: 6904475958163862052}
   - {fileID: 6037052951990889629}

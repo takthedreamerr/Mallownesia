@@ -7,9 +7,9 @@ public class Door2 : MonoBehaviour
     private string isOpenParam = "IsOpen";
 
     [Header("References")]
-    public Collider doorCollider; // Main blocking collider
-    public Collider openTrigger; // Trigger to open the door
+    public Collider stopPlayer_collider; //collider to stop player from going through door when closed
     public Collider closeTrigger; // Trigger to close the door
+
 
     [Header("UI Prompt")]
     public GameObject pressEText; // "Press E to open" text
@@ -22,16 +22,6 @@ public class Door2 : MonoBehaviour
         // Initialize UI
         if (pressEText != null)
             pressEText.SetActive(false);
-
-        // Setup colliders
-        if (doorCollider != null)
-            doorCollider.isTrigger = false;
-
-        if (openTrigger != null)
-            openTrigger.isTrigger = true;
-
-        if (closeTrigger != null)
-            closeTrigger.isTrigger = true;
 
         // Auto-find animator
         if (animator == null)
@@ -54,17 +44,13 @@ public class Door2 : MonoBehaviour
     public void OpenDoor()
     {
         if (isOpen) return;
+        gameObject.GetComponent<Collider>().enabled = false;//disable 'press E text' collider
+        stopPlayer_collider.gameObject.SetActive(false);//disable collider that stops player from going through door
 
         if (animator != null)
         {
             animator.SetBool(isOpenParam, true);
             Debug.Log("SimpleDoor: Playing open animation");
-        }
-
-        // Disable blocking collider
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = false;
         }
 
         // Hide press E text
@@ -74,7 +60,7 @@ public class Door2 : MonoBehaviour
         }
 
         isOpen = true;
-        SoundManager.PlaySound(SoundType.Door);
+        //SoundManager.PlaySound(SoundType.Door);
         Debug.Log("SimpleDoor: Door opened!");
     }
 
@@ -86,12 +72,6 @@ public class Door2 : MonoBehaviour
         {
             animator.SetBool(isOpenParam, false);
             Debug.Log("SimpleDoor: Playing close animation");
-        }
-
-        // Re-enable blocking collider
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = true;
         }
 
         isOpen = false;
