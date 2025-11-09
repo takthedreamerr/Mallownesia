@@ -12,7 +12,12 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadGameOverScene(string GameOver)
     {
-        SceneManager.LoadScene( GameOver);
+        SceneManager.LoadScene(GameOver);
     }
+
+    /*public void Load(string GameOver)
+    {
+        SceneManager.LoadScene(GameOver);
+    }*/
 
 }
