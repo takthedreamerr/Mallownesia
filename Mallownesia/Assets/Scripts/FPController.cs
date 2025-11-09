@@ -8,7 +8,7 @@ public class FPController : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
-    //public float jumpHeight = 1.5f;
+    public float jumpHeight = 1.5f;
     [Header("Animation Settings")]
     public Animator animator;
 
@@ -29,6 +29,7 @@ public class FPController : MonoBehaviour
     private Vector2 lookInput;
     private Vector3 velocity;
     private float verticalRotation = 0f;
+    private bool jumpInput; // ✅ Track jump input
 
     private void Awake()
     {
@@ -55,6 +56,14 @@ public class FPController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            jumpInput = true;
+        }
     }
 
     /*public void OnPickUp(InputAction.CallbackContext context)
@@ -104,8 +113,25 @@ public class FPController : MonoBehaviour
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         controller.Move(move * moveSpeed * Time.deltaTime);
 
-        if (controller.isGrounded && velocity.y < 0)
-            velocity.y = -1.5f;
+        if (controller.isGrounded)
+        {
+            // Reset vertical velocity when grounded
+            if (velocity.y < 0)
+            {
+                velocity.y = -1.5f;
+            }
+
+            // Apply jump if input detected
+            if (jumpInput)
+            {
+                // Physics formula: v = √(2 * g * h)
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                jumpInput = false; // Reset jump input
+
+                // Optional: Trigger jump animation
+                animator.SetTrigger("Jump");
+            }
+        }
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
@@ -113,6 +139,8 @@ public class FPController : MonoBehaviour
         // ✅ Animation update
         float speed = move.magnitude;
         animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
+
+        animator.SetBool("IsGrounded", controller.isGrounded);
     }
 
     public void HandleLook()
