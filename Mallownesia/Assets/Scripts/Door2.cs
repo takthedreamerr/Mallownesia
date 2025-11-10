@@ -75,7 +75,7 @@ public class Door2 : MonoBehaviour
         }
 
         isOpen = false;
-        SoundManager.PlaySound(SoundType.Door);
+       // SoundManager.PlaySound(SoundType.Door);
         Debug.Log("SimpleDoor: Door closed!");
     }
 

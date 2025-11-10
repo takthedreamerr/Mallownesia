@@ -12,6 +12,7 @@ TagManager:
   - Door
   - LockerDoor
   - InvitePoster
+  - TriggerZone
   layers:
   - Default
   - TransparentFX
@@ -48,6 +49,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ps
+    uniqueID: 3563588379
+    locked: 0
+  - name: panell
+    uniqueID: 437957521
     locked: 0
   m_RenderingLayers:
   - Default

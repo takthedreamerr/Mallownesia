@@ -30,6 +30,8 @@ public class GameStarterController : MonoBehaviour
             timer.HideTimer();
         }
 
+        SoundManager.Instance.PlaySound1();
+
         // Start the coroutine to handle the animation and delay
         StartCoroutine(StartGameAfterAnimation());
     }

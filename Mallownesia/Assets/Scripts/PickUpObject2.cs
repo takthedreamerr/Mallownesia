@@ -25,6 +25,7 @@ public class PickUpObject2 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
+
             if (nearBook)
             {
                 Debug.Log("Interacted with book!");
@@ -35,6 +36,8 @@ public class PickUpObject2 : MonoBehaviour
                 StopBookParticleSystem();
                 StopBookLight();
             }
+
+            SoundManager.Instance.PlaySound7();
         }
     }
 
@@ -53,11 +56,13 @@ public class PickUpObject2 : MonoBehaviour
 
             // Get the particle system from the book object
             bookParticleSystem = other.GetComponentInChildren<ParticleSystem>();
+            SoundManager.Instance.PlaySound5();
 
             // If we found a particle system and it's not playing, start it
             if (bookParticleSystem != null && !bookParticleSystem.isPlaying)
             {
                 bookParticleSystem.Play();
+               
             }
         }
     }
@@ -77,9 +82,8 @@ public class PickUpObject2 : MonoBehaviour
         {
             bookPanel.SetActive(false);
 
-            // DON'T restart the particle system when book panel is closed
-            // The particle system should remain stopped
         }
+        SoundManager.Instance.PlaySound7();
     }
 
     private void StopBookParticleSystem()

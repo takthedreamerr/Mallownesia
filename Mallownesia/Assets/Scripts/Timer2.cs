@@ -33,14 +33,18 @@ public class Timer2 : MonoBehaviour
 
         if (countdownText != null)
             countdownText.text = currentTime.ToString("0");
-
-        if (currentTime <= 0)
-        {
-            currentTime = 0;
-            hasTriggeredGameOver = true;
-            TriggerGameOver();
+            
+        if (currentTime <= 10)
+            {
+            SoundManager.Instance.PlaySound11();
+            if (currentTime <= 0)
+                {
+                    currentTime = 0;
+                    hasTriggeredGameOver = true;
+                    TriggerGameOver();
+                }
+            }
         }
-    }
 
     public void StartBedroomTimer()
     {

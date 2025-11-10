@@ -105,13 +105,13 @@ public class FPController : MonoBehaviour
         }
     }
 
-    //Kat if youre reading this, this is where you will take the code and pause the game and resume it
     public void Pause()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
             Time.timeScale = 0f;
             pauseMenu.SetActive(true);
+            SoundManager.Instance.PlaySound7();
         }
     }
 
@@ -121,6 +121,8 @@ public class FPController : MonoBehaviour
         {
             Time.timeScale = 1f;
             pauseMenu.SetActive(false);
+            SoundManager.Instance.PlaySound7();
+
         }
     }
 

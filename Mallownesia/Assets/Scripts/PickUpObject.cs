@@ -25,6 +25,7 @@ public class PickUpObject : MonoBehaviour
             {
                 // Pick up remote
                 PickUpRemote();
+                SoundManager.Instance.PlaySound7();
             }
         }
     }
@@ -61,9 +62,7 @@ public class PickUpObject : MonoBehaviour
 
         holdingRemote = true;
 
-        // Hide the "Press E" prompt if you want, or keep it showing drop instructions
-        // interact.gameObject.SetActive(true); // Keep it visible for drop instructions
-    }
+       
 
     private void DropRemote()
     {
@@ -72,7 +71,7 @@ public class PickUpObject : MonoBehaviour
         {
             PickObjct.SetActive(true);
             // Optional: Reset parent and position if you moved it
-            // PickObjct.transform.SetParent(null); // Detach from player
+            PickObjct.transform.SetParent(null); // Detach from player
             // Place it in front of the player when dropping
             PickObjct.transform.position = transform.position + transform.forward * 1.5f;
         }

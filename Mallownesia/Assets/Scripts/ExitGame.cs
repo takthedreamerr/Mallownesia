@@ -5,6 +5,11 @@ public class ExitGame : MonoBehaviour
 {
     public void RetryGame()
     {
+        SceneManager.LoadScene(3);
+    }
+
+    public void MainMenu()
+    {
         SceneManager.LoadScene(1);
     }
 }
