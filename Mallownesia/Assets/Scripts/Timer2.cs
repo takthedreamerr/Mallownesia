@@ -44,7 +44,7 @@ public class Timer2 : MonoBehaviour
 
     public void StartBedroomTimer()
     {
-        if (timerActive) return;
+        //if (timerActive) return;
 
         timerActive = true;
         currentTime = bedroomTimeLimit;

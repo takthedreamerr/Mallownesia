@@ -4,6 +4,7 @@ public class Door2CloseTrigger : MonoBehaviour
 {
     [Header("Door Reference")]
     public Door2 doorToClose;
+    public GameObject Dooor;
 
     [Header("Timer Reference")]
     public Timer2 bedroomTimer; // Reference to the bedroom timer
@@ -12,12 +13,6 @@ public class Door2CloseTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Close the door
-            if (doorToClose != null)
-            {
-                doorToClose.OnCloseTriggerEnter();
-            }
-
             // Stop and hide the first level timer
             if (Timer.Instance != null)
             {
@@ -26,9 +21,10 @@ public class Door2CloseTrigger : MonoBehaviour
             }
 
             // Start the bedroom timer
-            if (bedroomTimer != null && !bedroomTimer.IsTimerActive())
+            if (bedroomTimer != null ) //&& !bedroomTimer.IsTimerActive())
             {
                 bedroomTimer.StartBedroomTimer();
+                Dooor.SetActive(false);
                 Debug.Log("Bedroom timer started");
             }
         }
